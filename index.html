@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🚋 ZW Gleis Simulation</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="header-title">
+    <h1>🚋 ZW Gleis Simulation</h1>
+    <div class="subtitle">
+        Version 1.0 • Disposition | Planung | Simulation
+    </div>
+</div>
+    <div class="actions">
+      <input id="searchInput" placeholder="Fahrzeug suchen z.B. 3059" />
+      <button id="clearSearchBtn">Suche löschen</button>
+      <button id="planBtn">Manöver planen</button>
+      <button id="exportBtn">Backup exportieren</button>
+      <label class="fileBtn">Backup importieren<input id="importFile" type="file" accept="application/json" /></label>
+      <button class="danger" id="resetBtn">Alles löschen</button>
+    </div>
+  </header>
+
+  <div class="legend">
+    <span><i class="dot free"></i> Frei</span>
+    <span><i class="dot occupied"></i> Belegt</span>
+    <span><i class="dot multi"></i> Mehrfach</span>
+    <span><i class="dot planned"></i> Geplant</span>
+    <span><i class="dot route"></i> Via/Fahrweg</span>
+    <span><i class="dot search"></i> Suchtreffer</span>
+    <span><i class="dot sb"></i> Schiebebühne</span>
+  </div>
+
+  <main>
+    <section class="panel wide">
+      <div class="panelHeader">
+        <h2>Halle / Innenbereich</h2>
+        <span>Gleis 1–56 · oben ungerade, unten gerade · SB über ganze Hallenlänge</span>
+      </div>
+      <div id="hallMap" class="hallMap"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panelHeader">
+        <h2>Aussenanlage</h2>
+        <span>Aussenplan als Hintergrund · klickbare Hotspots</span>
+      </div>
+      <div id="outsideMap" class="outsideMap"></div>
+    </section>
+  </main>
+
+  <aside id="sidePanel" class="sidePanel hidden">
+    <button id="closeSideBtn" class="close">×</button>
+    <h2 id="sideTitle"></h2>
+    <div id="trackInfo" class="trackInfo"></div>
+
+    <h3>Fahrzeuge</h3>
+    <div id="vehicleList"></div>
+
+    <div class="formBlock">
+      <input id="vehicleInput" placeholder="Fahrzeug z.B. 3059 WT1" />
+      <button id="addVehicleBtn">Hinzufügen</button>
+    </div>
+
+    <h3>Verschieben</h3>
+    <select id="vehicleSelect"></select>
+    <input id="viaInput" placeholder="Via-Gleis optional z.B. SB oder 19" />
+    <input id="targetInput" placeholder="Zielgleis z.B. 9, SB, SBB" />
+    <button id="moveVehicleBtn">Verschieben</button>
+    <button id="removeVehicleBtn" class="danger">Entfernen</button>
+
+    <h3>Historie</h3>
+    <div id="historyList"></div>
+  </aside>
+
+  <div id="planModal" class="modal hidden">
+    <div class="modalBox">
+      <button id="closePlanBtn" class="close">×</button>
+      <h2>Was-wäre-wenn Manöver planen</h2>
+      <p>Diese Planung verändert den Ist-Zustand nicht.</p>
+      <input id="planVehicle" placeholder="Fahrzeug z.B. 3059" />
+      <input id="planFrom" placeholder="Von Gleis z.B. 20" />
+      <input id="planVia" placeholder="Via-Gleis optional, z.B. SB,19" />
+      <input id="planTo" placeholder="Nach Gleis z.B. 9" />
+      <button id="simulateBtn">Simulation anzeigen</button>
+      <button id="clearPlanBtn">Planung löschen</button>
+      <div id="planResult"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+<footer class="app-footer">
+    <strong>ZW Gleis Simulation</strong><br>
+    Version 1.0<br>
+    © Larissa Simoes
+</footer>
+</body>
+</html>

@@ -1,0 +1,158 @@
+:root {
+  --bg: #07111f;
+  --panel: #122033;
+  --panel2: #0d1a2b;
+  --grid: rgba(148,163,184,.12);
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+  --free: #16a34a;
+  --occupied: #dc2626;
+  --multi: #9333ea;
+  --planned: #facc15;
+  --route: #f97316;
+  --search: #2563eb;
+  --sb: #f97316;
+}
+* { box-sizing: border-box; }
+body { margin:0; font-family: Arial, sans-serif; background:var(--bg); color:var(--text); }
+.topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 16px; background:#020817; border-bottom:1px solid #334155; }
+h1 { margin:0; font-size:22px; }
+p { margin:2px 0 0; color:var(--muted); }
+.actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
+input, select { padding:9px 10px; border:1px solid #475569; border-radius:6px; background:#f8fafc; color:#111827; }
+button, .fileBtn { padding:9px 11px; border:0; border-radius:6px; background:#2563eb; color:white; font-weight:700; cursor:pointer; display:inline-block; }
+button:hover, .fileBtn:hover { background:#1d4ed8; }
+.danger { background:#dc2626; }
+.danger:hover { background:#b91c1c; }
+.fileBtn input { display:none; }
+.legend { display:flex; gap:18px; flex-wrap:wrap; padding:9px 16px; background:#172438; border-bottom:1px solid #334155; font-size:14px; }
+.dot { display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px; vertical-align:-1px; }
+.dot.free { background:var(--free); } .dot.occupied { background:var(--occupied); } .dot.multi{background:var(--multi)} .dot.planned{background:var(--planned)} .dot.route{background:var(--route)} .dot.search{background:var(--search)} .dot.sb{background:var(--sb)}
+main { display:grid; grid-template-columns: 1.55fr .9fr; gap:12px; padding:12px; }
+.panel { background:var(--panel); border:1px solid #334155; border-radius:10px; padding:12px; min-width:0; }
+.panelHeader { display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:10px; }
+.panelHeader h2 { margin:0; font-size:18px; }
+.panelHeader span { color:var(--muted); font-size:12px; }
+.hallMap, .outsideMap { position:relative; min-height:720px; overflow:auto; border:1px solid #475569; border-radius:8px; background-image: radial-gradient(circle, var(--grid) 1px, transparent 1px); background-size: 18px 18px; background-color:var(--panel2); }
+.track { position:absolute; border:2px solid #dbeafe; border-radius:5px; background:var(--free); color:white; font-weight:700; font-size:12px; display:flex; align-items:center; justify-content:center; text-align:center; white-space:pre-line; cursor:pointer; overflow:hidden; padding:2px; }
+.track:hover { outline:3px solid #38bdf8; z-index:20; }
+.track.occupied { background:var(--occupied); }
+.track.multi { background:var(--multi); }
+.track.planned { background:var(--planned); color:#111827; }
+.track.route { background:var(--route); }
+.track.search { background:var(--search) !important; }
+.track.sb { background:var(--sb); }
+.trackNumber { position:absolute; color:#cbd5e1; font-weight:700; font-size:13px; transform:translateY(-50%); }
+.transferLane { position:absolute; border-top:2px dashed #94a3b8; border-bottom:2px dashed #94a3b8; opacity:.7; }
+.sbRail { position:absolute; background:rgba(249,115,22,.18); border-left:2px dashed #f97316; border-right:2px dashed #f97316; }
+.sidePanel { position:fixed; top:0; right:0; width:390px; height:100vh; background:#0f2440; border-left:2px solid white; z-index:1000; padding:16px; overflow:auto; box-shadow:-8px 0 20px rgba(0,0,0,.45); }
+.hidden { display:none !important; }
+.close { float:right; background:#dc2626; padding:6px 10px; }
+.trackInfo { background:#0b1727; border:1px solid #334155; border-radius:8px; padding:10px; margin:10px 0; color:#e2e8f0; }
+.vehicle { background:#f8fafc; color:#111827; border-radius:6px; padding:8px; margin:6px 0; font-weight:700; }
+.formBlock { display:flex; gap:6px; margin:10px 0; }
+.formBlock input { flex:1; }
+.history { background:#0b1727; border:1px solid #334155; border-radius:6px; padding:7px; margin:6px 0; color:#dbeafe; font-size:12px; white-space:pre-line; }
+.modal { position:fixed; inset:0; background:rgba(0,0,0,.55); display:flex; align-items:center; justify-content:center; z-index:2000; }
+.modalBox { width:440px; max-width:95vw; background:#1e40af; border:2px solid white; border-radius:12px; padding:18px; }
+.modalBox input { width:100%; margin:6px 0; }
+#planResult { margin-top:12px; background:#0b1727; border:1px solid #93c5fd; border-radius:8px; padding:10px; white-space:pre-line; }
+@media (max-width:1100px){ main{grid-template-columns:1fr;} .topbar{align-items:flex-start; flex-direction:column;} .actions{justify-content:flex-start;} }
+
+/* v4.1 layout adjustments */
+.track.sbFull {
+  background: rgba(249,115,22,.82);
+  border: 2px solid #fed7aa;
+  font-size: 15px;
+  letter-spacing: .2px;
+}
+.railLayer {
+  position:absolute;
+  inset:0;
+  width:1050px;
+  height:700px;
+  pointer-events:none;
+  z-index:0;
+}
+.railPath {
+  fill:none;
+  stroke:#cbd5e1;
+  stroke-width:2.1;
+  opacity:.75;
+}
+.outsideMap .track,
+.hallMap .track {
+  z-index:2;
+}
+.outsideMap {
+  min-width:1050px;
+}
+
+/* v4.3: Aussenanlage als Originalplan-Hintergrund */
+.outsideMap {
+  min-width: 1104px;
+  width: 1104px;
+  min-height: 736px;
+  height: 736px;
+  background-image:
+    linear-gradient(rgba(7,17,31,.08), rgba(7,17,31,.08)),
+    url("images/aussen_plan.png");
+  background-size: 1104px 736px;
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-color: #f8fafc;
+}
+.outsideMap .railLayer { display:none; }
+.outsideMap .track.planHotspot {
+  background: rgba(22,163,74,.72);
+  border: 2px solid rgba(255,255,255,.95);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.15);
+  font-size: 9px;
+}
+.outsideMap .track.planHotspot.slim {
+  font-size: 9px;
+  padding: 1px;
+}
+.outsideMap .track.planHotspot.narrow {
+  font-size: 9px;
+}
+.outsideMap .track.diagonal91 {
+  transform: rotate(-38deg);
+  transform-origin: left center;
+}
+.outsideMap .track.sb.planHotspot {
+  background: rgba(249,115,22,.9);
+  font-size: 11px;
+}
+/* ---------- Footer ---------- */
+
+.app-footer{
+    position:fixed;
+
+    left:15px;
+    bottom:12px;
+
+    font-size:12px;
+    line-height:18px;
+
+    color:#9ca3af;
+
+    opacity:0.75;
+
+    user-select:none;
+
+    z-index:9999;
+}
+.header-title h1{
+    margin:0;
+    color:white;
+    font-size:30px;
+    font-weight:700;
+}
+
+.subtitle{
+    color:#9ca3af;
+    font-size:13px;
+    margin-top:2px;
+    letter-spacing:0.5px;
+}
