@@ -156,3 +156,34 @@ main { display:grid; grid-template-columns: 1.55fr .9fr; gap:12px; padding:12px;
     margin-top:2px;
     letter-spacing:0.5px;
 }
+/* ===================================================
+   Responsive Design - Handy & Tablet
+   Version 1.1
+=================================================== */
+
+@media (max-width: 900px) {
+
+    .topbar{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:12px;
+    }
+
+    .toolbar{
+        display:flex;
+        flex-wrap:wrap;
+        gap:8px;
+        width:100%;
+    }
+
+    .toolbar button{
+        flex:1 1 45%;
+        min-width:140px;
+    }
+
+    input[type="text"]{
+        width:100%;
+        max-width:none;
+    }
+
+}
