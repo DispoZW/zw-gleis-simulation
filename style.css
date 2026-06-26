@@ -163,27 +163,71 @@ main { display:grid; grid-template-columns: 1.55fr .9fr; gap:12px; padding:12px;
 
 @media (max-width: 900px) {
 
-    .topbar{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:12px;
-    }
+  body {
+    overflow-x: hidden;
+  }
 
-    .toolbar{
-        display:flex;
-        flex-wrap:wrap;
-        gap:8px;
-        width:100%;
-    }
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
 
-    .toolbar button{
-        flex:1 1 45%;
-        min-width:140px;
-    }
+  .header-title h1 {
+    font-size: 22px;
+  }
 
-    input[type="text"]{
-        width:100%;
-        max-width:none;
-    }
+  .subtitle {
+    font-size: 11px;
+  }
 
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .actions input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .actions button,
+  .fileBtn {
+    flex: 1 1 45%;
+    min-width: 130px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .legend {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  main {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .panel,
+  .panel.wide {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .hallMap,
+  .outsideMap {
+    width: 100%;
+    overflow: auto;
+  }
+
+  .app-footer {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    margin: 12px;
+  }
 }
